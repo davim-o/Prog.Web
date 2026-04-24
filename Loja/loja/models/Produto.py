@@ -19,3 +19,6 @@ related_name='fabricante', on_delete=models.SET_NULL)
     
     def __str__(self):
         return '{}'.format(self.Produto)
+    
+    msgPromocao = models.CharField(null=True, max_length=100,
+blank=True)
