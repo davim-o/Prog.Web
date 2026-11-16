@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Novo produto{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/home.css' %}">{% endblock %}
+{% block content %}
+<div id="content"><div class="container">
+    <h2>Novo produto</h2>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'create_produto' %}">
+        {% csrf_token %}
+        <div class="form-group"><label for="Produto">Produto</label><input id="Produto" name="Produto" class="form-control" maxlength="100" required></div>
+        <div class="form-check mb-2"><input id="destaque" type="checkbox" name="destaque" class="form-check-input" checked><label for="destaque" class="form-check-label">Destaque</label></div>
+        <div class="form-check mb-3"><input id="promocao" type="checkbox" name="promocao" class="form-check-input"><label for="promocao" class="form-check-label">Promoção</label></div>
+        <div class="form-group"><label for="msgPromocao">Mensagem da promoção</label><input id="msgPromocao" name="msgPromocao" class="form-control" maxlength="100"></div>
+        <div class="form-group"><label for="preco">Preço</label><input id="preco" name="preco" type="text" inputmode="decimal" class="form-control" placeholder="0,00" required></div>
+        <div class="form-group">
+            <label for="CategoriaFk">Categoria</label>
+            <select id="CategoriaFk" name="CategoriaFk" class="form-control" required>
+                <option value="-1">Selecione uma categoria</option>
+                {% for categoria in categorias %}<option value="{{ categoria.id }}">{{ categoria.Categoria }}</option>{% endfor %}
+            </select>
+            {% if not categorias %}<small class="text-danger">Cadastre uma categoria antes de criar o produto.</small>{% endif %}
+        </div>
+        <div class="form-group">
+            <label for="FabricanteFk">Fabricante</label>
+            <select id="FabricanteFk" name="FabricanteFk" class="form-control" required>
+                <option value="-1">Selecione um fabricante</option>
+                {% for fabricante in fabricantes %}<option value="{{ fabricante.id }}">{{ fabricante.fabricante }}</option>{% endfor %}
+            </select>
+            {% if not fabricantes %}<small class="text-danger">Cadastre um fabricante antes de criar o produto.</small>{% endif %}
+        </div>
+        <div class="form-group"><label for="image">Imagem</label><input id="image" type="file" name="image" class="form-control-file" accept="image/*"></div>
+        <button type="submit" class="btn btn-primary" {% if not categorias or not fabricantes %}disabled{% endif %}>Criar</button>
+        <a href="{% url 'produtos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div></div>
+{% endblock %}

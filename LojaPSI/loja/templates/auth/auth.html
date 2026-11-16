@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+{% block content %}
+    <div id="content" class="d-flex align-items-center py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <form class="col-12 col-sm-10 col-md-6 col-lg-4 auth-card" method="POST" action="">
+                    <div class="auth-header text-center mb-4">
+                        <div class="auth-icon-badge mb-2">
+                            <i class="fa {% if title == 'Login' %}fa-lock{% else %}fa-user-plus{% endif %}"></i>
+                        </div>
+                        <h3 class="text-center font-weight-bold mb-1">{{ title }}</h3>
+                        <p class="text-muted small mb-0">
+                            {% if title == 'Login' %}
+                                Acesse sua conta tradicional ou via redes sociais
+                            {% else %}
+                                Crie sua conta rapidamente na plataforma
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    {% if message is not None %}
+                        <div class="alert alert-{{ message.type }} shadow-sm">{{ message.text }}</div>
+                    {% endif %}
+                    {% csrf_token %}
+
+                    {% for f in form %}
+                        <div class="form-group">
+                            <label class="font-weight-semibold small text-secondary mb-1">{{ f.label }}</label>
+                            {{ f }}
+                            {% for error in f.errors %}
+                                <div class="invalid-feedback" style="display: initial;">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <a href="{{link_href}}" class="text-center mt-2 mb-3 auth-switch-link" style="display: block;">{{link_text}}</a>
+                    <button type="submit" class="btn btn-primary btn-auth-submit">{{button_text}}</button>
+
+                    <!-- Botões de Login com Redes Sociais (Capítulo 12.2 e 12.3) -->
+                    <p class="text-center mt-3 mb-2 auth-divider" style="display: block;"><span>Ou</span></p>
+                    <div class="social-container">
+                        <a class="btn" id="facebook" href="{% url 'social:begin' 'facebook' %}" title="Entrar com Facebook">
+                            <i class="fa fa-facebook-f"></i>
+                        </a>
+                        <a class="btn" id="google" href="{% url 'social:begin' 'google-oauth2' %}" title="Entrar com Google">
+                            <i class="fa fa-google"></i>
+                        </a>
+                    </div>
+                    <!-- Até aqui -->
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

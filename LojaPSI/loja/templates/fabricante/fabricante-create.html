@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Novo fabricante{% endblock %}
+{% block content %}
+<div id="content"><div class="container">
+<h2>Novo fabricante</h2>
+<form method="POST">{% csrf_token %}
+    <div class="form-group"><label for="fabricante">Nome</label><input id="fabricante" name="fabricante" class="form-control" maxlength="100" required></div>
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <a href="{% url 'fabricantes' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+</div></div>
+{% endblock %}

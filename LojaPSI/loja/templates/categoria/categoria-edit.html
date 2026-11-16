@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Editar categoria{% endblock %}
+{% block content %}
+<div id="content"><div class="container">
+<h2>Editar categoria</h2>
+<form method="POST">{% csrf_token %}
+    <div class="form-group"><label for="Categoria">Nome</label><input id="Categoria" name="Categoria" value="{{ categoria.Categoria }}" class="form-control" maxlength="100" required></div>
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <a href="{% url 'categorias' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+</div></div>
+{% endblock %}

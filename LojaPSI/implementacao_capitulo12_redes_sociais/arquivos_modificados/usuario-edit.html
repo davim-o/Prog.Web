@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Perfil do Usuário{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/home.css' %}">{% endblock %}
+{% block content %}
+<div id="content" class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <form class="col-md-8 col-lg-6 auth-card" method="POST" action="">
+                <div class="text-center mb-4">
+                    <h4 class="font-weight-bold mb-1">Painel de Edição de Perfil</h4>
+                    <p class="text-muted small mb-0">Gerencie seus dados cadastrais e conexões de redes sociais</p>
+                </div>
+
+                {# Exibição de dados extras da Rede Social (Capítulo 12.3 - pág. 19 e 27) #}
+                {% if backends.associated %}
+                <div class="alert alert-light border shadow-sm mb-4">
+                    <h6 class="font-weight-bold mb-2"><i class="fa fa-share-alt text-primary"></i> Conta Vinculada via Rede Social</h6>
+                    {% for ass in backends.associated %}
+                        <div class="d-flex align-items-center mb-2">
+                            {% if ass.extra_data.picture.data.url %}
+                                <img src="{{ ass.extra_data.picture.data.url }}" alt="Foto Social" class="rounded-circle mr-3" width="48" height="48">
+                            {% endif %}
+                            <div>
+                                <span class="badge badge-primary text-uppercase">{{ ass.provider }}</span>
+                                <small class="text-muted d-block">UID: {{ ass.uid }}</small>
+                                {% if ass.extra_data.name %}
+                                    <small class="text-secondary d-block">Nome Social: {{ ass.extra_data.name }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if message is not None %}
+                <div class="alert alert-{{ message.type }}">{{ message.text }}</div>
+                {% endif %}
+                <div class="row">
+                {% csrf_token %}
+                {% for f in userForm %}
+                    {% if not f.is_hidden %}
+                    <div class="form-group col-md-6">
+                    <label class="font-weight-semibold small text-secondary mb-1">{{ f.label }}</label>
+                    {{ f }}
+                    {% for error in f.errors %}
+                     <div class="invalid-feedback" style="display: initial;">{{ error }}</div> 
+                    {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ f }}
+                    {% endif %}
+                {% endfor %}
+                {% for f in usuarioForm %}
+                    {% if not f.is_hidden %}
+                        <div class="form-group col-md-6">
+                        <label class="font-weight-semibold small text-secondary mb-1">{{ f.label }}</label>
+                        {{ f }}
+                        {% for error in f.errors %}
+                        <div class="invalid-feedback" style="display: initial; ">{{ error }}</div>
+                        {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ f }}
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary btn-auth-submit mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

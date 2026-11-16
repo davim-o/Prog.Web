@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Editar produto{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/home.css' %}">{% endblock %}
+{% block content %}
+<div id="content"><div class="container">
+    <h2>Editar produto</h2>
+    <form method="POST" action="{% url 'edit_produto_postback' %}">
+        {% csrf_token %}
+        <input type="hidden" value="{{ produto.id }}" name="id">
+        <div class="form-group"><label for="Produto">Produto</label><input id="Produto" value="{{ produto.produtoo }}" name="Produto" class="form-control" maxlength="100" required></div>
+        <div class="form-check mb-2"><input id="destaque" type="checkbox" name="destaque" class="form-check-input" {% if produto.destaque %}checked{% endif %}><label for="destaque" class="form-check-label">Destaque</label></div>
+        <div class="form-check mb-3"><input id="promocao" type="checkbox" name="promocao" class="form-check-input" {% if produto.promocao %}checked{% endif %}><label for="promocao" class="form-check-label">Promoção</label></div>
+        <div class="form-group"><label for="msgPromocao">Mensagem da promoção</label><input id="msgPromocao" value="{{ produto.msgPromocao|default:'' }}" name="msgPromocao" class="form-control" maxlength="100"></div>
+        <div class="form-group">
+            <label for="CategoriaFk">Categoria</label>
+            <select id="CategoriaFk" name="CategoriaFk" class="form-control" required>
+                <option value="-1">Selecione uma categoria</option>
+                {% for categoria in categorias %}<option value="{{ categoria.id }}" {% if produto.categoria_id == categoria.id %}selected{% endif %}>{{ categoria.Categoria }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="FabricanteFk">Fabricante</label>
+            <select id="FabricanteFk" name="FabricanteFk" class="form-control" required>
+                <option value="-1">Selecione um fabricante</option>
+                {% for fabricante in fabricantes %}<option value="{{ fabricante.id }}" {% if produto.fabricante_id == fabricante.id %}selected{% endif %}>{{ fabricante.fabricante }}</option>{% endfor %}
+            </select>
+        </div>
+        <p>Preço atual: <strong>R$ {{ produto.preco|floatformat:2 }}</strong></p>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{% url 'produtos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div></div>
+{% endblock %}

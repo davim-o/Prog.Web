@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Carrinho{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="content">
+    <div class="container">
+        <div class="alert alert-info">
+            <h3>Carrinho de Compras</h3>
+        </div>
+        <div class="row mb-3">
+            <a class="col-md-4 font-weight-bold">Produto</a>
+            <a class="col-md-2 font-weight-bold">Quantidade</a>
+            <a class="col-md-2 font-weight-bold">Preço</a>
+            <a class="col-md-2 font-weight-bold">Total</a>
+        </div>
+        {% if itens %}
+            {% for item in itens %}
+                <div class="row mb-2">
+                    <a class="col-md-4">{{ item.produto.produtoo }}</a>
+                    <div class="col-md-2 d-flex">
+                        <form method="POST" action="{% url 'diminuir_quantidade' item.id %}"> {% csrf_token %} 
+                            <button type="submit" class="btn btn-sm bg-secondary"><i class="fa fa-minus"></i></button>
+                        </form>
+                        <span class="mx-2">{{ item.quantidade }}</span>
+                        <form method="POST" action="{% url 'aumentar_quantidade' item.id %}"> {% csrf_token %} 
+                            <button type="submit" class="btn btn-sm bg-secondary"><i class="fa fa-plus"></i></button>
+                        </form>
+                    </div>
+                    <a class="col-md-2">R$ {{ item.preco|floatformat:2 }}</a>
+                    <a class="col-md-2">R$ {{ item.total }}</a>
+                    <a class="col-md-2"> 
+                        <form method="POST" action="{% url 'remover_carrinhoitem' item.id %}" style="display:inline;"> {% csrf_token %} 
+                            <button type="submit" class="btn btn-danger">Excluir</button> 
+                        </form> 
+                    </a>
+                </div>
+            {% endfor %}
+            <h5 class="mt-4">Total: R$ {{ carrinho.total|floatformat:2 }}</h5>
+            <div class="mt-4">
+                <a href="{% url 'home' %}" class="btn btn-secondary">Voltar à loja</a>
+                <a href="{% url 'confirmar_carrinho' %}" class="btn btn-success">Finalizar Compra</a>
+            </div>
+        {% else %}
+            <div class="alert alert-warning mt-4" role="alert">
+                Seu carrinho está vazio.
+            </div>
+            <a href="{% url 'home' %}" class="btn btn-primary mt-3">Ir à loja</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

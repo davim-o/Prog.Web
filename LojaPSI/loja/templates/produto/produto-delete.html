@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Excluir produto{% endblock %}
+{% block content %}
+<div id="content"><div class="container">
+    <h2>Excluir produto</h2>
+    <div class="alert alert-warning">Tem certeza que deseja excluir <strong>{{ produto.produtoo }}</strong>?</div>
+    <form method="POST" action="{% url 'delete_produto_postback' %}">
+        {% csrf_token %}<input type="hidden" name="id" value="{{ produto.id }}">
+        <button type="submit" class="btn btn-danger">Excluir</button>
+        <a href="{% url 'produtos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div></div>
+{% endblock %}
